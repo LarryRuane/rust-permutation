@@ -14,6 +14,11 @@ fn get(swaps: &HashMap<usize, usize>, i: usize) -> usize {
 
 fn main() {
     let args: Vec<String> = env::args().collect();
+    if args.len() < 2 || args.len() > 3 {
+        println!("usage: {} n [m]", args[0]);
+        println!("print random permutation of n integers each within 0..m-1");
+        return;
+    }
     let n: usize = args[1].parse().expect("not an integer");
     let mut m = n;
     if args.len() >= 3 {
