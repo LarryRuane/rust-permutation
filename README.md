@@ -1,1 +1,9 @@
-# print random permutation of n integers each within 0..m-1
+# Generate a random permutation of integers
+
+A random permutation algorithm takes two arguments, `N`, the number of integers to generate, and `M`, the range of the integers (zero through `M-1`), with `N <= M`. An easy way to remember the meanings of these parameters is that `M` is "bigger" (wider) than `N`.
+
+The article on [pseudo-random permutations](https://en.wikipedia.org/wiki/Random_permutation) explains two basic algorithms, brute-force and the Knuth shuffle. To simulate shuffling a deck of cards (`M = N = 52`), the Knuth shuffle is the best, because it's O(N) whereas the brute-force method will generate many duplicates near the end of the algorithm (it will take, on average, `N` tries to generate the one remaining value), so is approximately O(N^2).
+
+But if we wish to simulate dealing a 5-card poker hand, brute-force is better. It has better memory usage, because it requires an array of length 5, whereas the Knuth shuffles requires an array of length 52 (the algorithm loops only 5 times, and the first 5 array elements make up the result). The runtime of brute-force is only slightly greater than `N` (5), since the probability of duplicates is low (only 5/52 on the last loop iteration).
+
+The algorithm implemented here has the best properties of both algorithms, using time and memory proportional to `N`. It is Knuth's algorithm except the array beyond the current loop index is *virtual*. If we're swapping element zero with a random element, say at index 37, then we create a hash map entry with key 37 and value 0. This records that the virtual array at index 37 has value 0. Any index `i` for which there is no hash entry (entry with with key `i`), which is most of them, is considered to have value `i` in the virtual array. If we're dealing a 5-card poker hand, there will be 5 hash table entries and the 5-element array that holds the results. The algorithm loops only 5 times.
